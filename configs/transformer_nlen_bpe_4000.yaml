@@ -1,0 +1,75 @@
+name: "transformer_nlen_bpe_4000"
+
+data:
+    src: "nl"
+    trg: "en"
+    train: "data/train/train.bpe.4000"
+    dev:   "data/dev/dev.bpe.4000"
+    test:  "data/test/test.bpe.4000"
+    level: "bpe"
+    lowercase: False
+    max_sent_length: 100
+    src_vocab: "shared_models/4000/vocab.txt"
+    trg_vocab: "shared_models/4000/vocab.txt"
+
+testing:
+    beam_size: 5
+    alpha: 1.0
+    postprocess: False
+
+training:
+    random_seed: 42
+    optimizer: "adam"
+    normalization: "tokens"
+    learning_rate: 0.0003
+    batch_size: 2048
+    batch_type: "token"
+    eval_batch_size: 1024
+    eval_batch_type: "token"
+    scheduling: "plateau"
+    patience: 8
+    weight_decay: 0.0
+    decrease_factor: 0.7
+    early_stopping_metric: "ppl"
+    epochs: 10
+    validation_freq: 500
+    logging_freq: 100
+    eval_metric: "bleu"
+    model_dir: "models/transformer_nlen_bpe_4000"
+    overwrite: False
+    shuffle: True
+    use_cuda: False
+    max_output_length: 100
+    print_valid_sents: [0, 1, 2, 3, 4]
+    label_smoothing: 0.3
+
+model:
+    initializer: "xavier"
+    bias_initializer: "zeros"
+    init_gain: 1.0
+    embed_initializer: "xavier"
+    embed_init_gain: 1.0
+    tied_embeddings: True
+    tied_softmax: True
+    encoder:
+        type: "transformer"
+        num_layers: 4
+        num_heads: 2
+        embeddings:
+            embedding_dim: 256
+            scale: True
+            dropout: 0
+        hidden_size: 256
+        ff_size: 512
+        dropout: 0
+    decoder:
+        type: "transformer"
+        num_layers: 1
+        num_heads: 2
+        embeddings:
+            embedding_dim: 256
+            scale: True
+            dropout: 0
+        hidden_size: 256
+        ff_size: 512
+        dropout: 0

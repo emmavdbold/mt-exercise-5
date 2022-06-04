@@ -138,5 +138,6 @@ models
 translations
 logs
 tools
+beam_experiments
 
 .DS_Store
